@@ -1,75 +1,91 @@
-# React + TypeScript + Vite
+# @avinash995/mfe-design-system
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Shared React UI primitives for the NovaMart micro frontends. The theme is the
+same one used by `mfe-shell`, so remotes rendered inside the shell match it
+without any extra configuration.
 
-Currently, two official plugins are available:
+Built on [Base UI](https://base-ui.com/) primitives with
+[Tailwind CSS v4](https://tailwindcss.com/) tokens.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Installation
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install @avinash995/mfe-design-system
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+`react` and `react-dom` (v19+) are peer dependencies and must be provided by the
+consuming app.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Usage
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Import the stylesheet once, at the entry point of the app or remote:
 
+```ts
+import "@avinash995/mfe-design-system/styles.css";
+```
+
+Then use the components:
+
+```tsx
+import { Button, Card, CardContent, CardHeader, CardTitle } from "@avinash995/mfe-design-system";
+
+export function ProductCard() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Aurora Headphones</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Button>Add to cart</Button>
+      </CardContent>
+    </Card>
+  );
+}
+```
+
+### Exports
+
+`Button`, `buttonVariants`, `Card`, `CardHeader`, `CardTitle`, `CardDescription`,
+`CardAction`, `CardContent`, `CardFooter`, `Input`, `Label`, `Badge`,
+`badgeVariants`, `Separator`, and the `cn` class-merging helper.
+
+## Typography
+
+The theme's font stack is `"DM Sans", ui-sans-serif, system-ui, sans-serif`. The
+font is intentionally **not** bundled, to avoid shipping a duplicate copy to
+every remote — `mfe-shell` already loads it. A standalone app should load it
+itself, for example:
+
+```html
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap"
+  rel="stylesheet"
+/>
+```
+
+Without it the stack falls back to the system UI font; nothing breaks.
+
+## Theming
+
+Colours, radii and fonts are exposed as CSS custom properties on `:root`, so a
+consumer can override any of them after importing the stylesheet:
+
+```css
+:root {
+  --primary: oklch(0.45 0.14 250);
+  --radius: 0.625rem;
+}
+```
+
+Dark mode is applied by adding the `dark` class to an ancestor element
+(typically `<html>`).
+
+## Local development
+
+```bash
+npm run dev     # preview app showcasing every component
+npm run build   # emit dist/index.js, dist/index.css and dist/index.d.ts
+npm run lint
 ```
