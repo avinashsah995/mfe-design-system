@@ -84,8 +84,12 @@ Dark mode is applied by adding the `dark` class to an ancestor element
 
 ## Local development
 
+The Vite app in `src/App.tsx` is the component showcase. Run it when developing
+components to review their variants, sizes, and theme behavior together.
+
 ```bash
-npm run dev     # preview app showcasing every component
-npm run build   # emit dist/index.js, dist/index.css and dist/index.d.ts
-npm run lint
+npm run dev        # open the component showcase
+npm run lint       # run static analysis
+npm run build      # emit dist/index.js, dist/index.css and dist/index.d.ts
+npm run pack:check # verify the files included in the npm package
 ```
